@@ -17,5 +17,5 @@ jobs:
         uses: dchitale/carbotrace/action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          carbotrace-url: 'https://carbotrace-backend.example.com/api' # Replace with your public/tunnel API URL
+          carbotrace-url: 'https://jh6npx1l-8001.inc1.devtunnels.ms/api' # Replace with your public/tunnel API URL
           threshold: '0.1'
