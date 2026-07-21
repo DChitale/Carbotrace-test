@@ -6,6 +6,11 @@ on:
   push:
     branches: [ main, master ]
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   carbon-audit:
     runs-on: ubuntu-latest
@@ -17,5 +22,5 @@ jobs:
         uses: DChitale/Carbotrace/action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          carbotrace-url: 'https://jh6npx1l-8001.inc1.devtunnels.ms/api' # Replace with your public/tunnel API URL
+          carbotrace-url: 'https://jh6npx1l-8001.inc1.devtunnels.ms/api'
           threshold: '0.1'
