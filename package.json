@@ -1,0 +1,12 @@
+{
+  "name": "carbotrace-test-app",
+  "version": "1.0.0",
+  "description": "Demo application for Carbotrace PR audit testing",
+  "main": "src/index.js",
+  "dependencies": {
+    "express": "^4.19.2",
+    "axios": "^1.7.2",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1"
+  }
+}

@@ -1,0 +1,21 @@
+name: Carbotrace Carbon Audit
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+
+jobs:
+  carbon-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Audit PR Carbon Delta
+        uses: dchitale/carbotrace/action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          carbotrace-url: 'https://carbotrace-backend.example.com/api' # Replace with your public/tunnel API URL
+          threshold: '0.1'
