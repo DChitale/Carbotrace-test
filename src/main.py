@@ -1,7 +1,13 @@
 import os
 import sys
+import re
 import time
 import math
+import csv
+import pickle
+import base64
+import struct
+import threading
 import requests
 import pandas as pd
 import numpy as np
@@ -68,3 +74,14 @@ if __name__ == "__main__":
     tensor_output = compute_heavy_tensor_analytics(data_grid)
     stats = summarize_results(tensor_output)
     print(f"Tensor analytics: {stats}")
+
+    # Cross-product scoring (nested loop pattern)
+    segments = ["enterprise", "smb", "consumer"]
+    categories = ["hardware", "software", "services"]
+    regions = ["us-east", "eu-west", "ap-south"]
+    cross = []
+    for seg in segments:
+        for cat in categories:
+            for reg in regions:
+                cross.append(f"{seg}-{cat}-{reg}")
+    print(f"Cross-product entries: {len(cross)}")
