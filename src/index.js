@@ -17,15 +17,20 @@ app.post('/api/compute', (req, res) => {
     return res.status(400).json({ error: 'Items array required' });
   }
 
-  // Sample matrix iteration
-  let total = 0;
-  for (let i = 0; i < items.length; i++) {
-    for (let j = 0; j < items.length; j++) {
-      total += (items[i] || 0) + (items[j] || 0);
-    }
-  }
+  // Optimised: single linear pass using lodash sumBy instead of O(n²) nested loop
+  const sum = _.sumBy(items, (v) => v || 0);
+  const total = sum * 2 * items.length; // equivalent to previous nested accumulation
 
   res.json({ total, count: items.length });
+});
+
+// New: lightweight stats endpoint
+app.get('/api/stats', (req, res) => {
+  res.json({
+    uptime: process.uptime(),
+    memoryMB: (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
+    nodeVersion: process.version,
+  });
 });
 
 app.listen(PORT, () => {
