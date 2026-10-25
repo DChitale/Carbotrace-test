@@ -22,6 +22,18 @@ resource "aws_instance" "gpu_compute_cluster" {
   }
 }
 
+# New: GPU training cluster — very high energy footprint
+resource "aws_instance" "ml_training_cluster" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "p3.8xlarge"
+  count         = 4
+
+  tags = {
+    Name        = "Carbotrace-ML-GPU-Training"
+    Environment = "production"
+  }
+}
+
 resource "aws_db_instance" "default" {
   allocated_storage    = 100
   engine               = "postgres"
@@ -32,4 +44,13 @@ resource "aws_db_instance" "default" {
   password             = "supersecretpass123"
   parameter_group_name = "default.postgres15"
   skip_final_snapshot  = true
+}
+
+# New: ElastiCache cluster with large nodes
+resource "aws_elasticache_cluster" "cache" {
+  cluster_id           = "carbotrace-cache"
+  engine               = "redis"
+  node_type            = "cache.r6g.2xlarge"
+  num_cache_nodes      = 3
+  parameter_group_name = "default.redis7"
 }
