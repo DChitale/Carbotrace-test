@@ -1,10 +1,10 @@
 import os
 import sys
 import time
+import math
 import requests
 import pandas as pd
 import numpy as np
-import scipy
 
 def process_data_matrix(matrix):
     """Sample data processing with nested loop patterns."""
@@ -29,17 +29,42 @@ def compute_heavy_tensor_analytics(data_grid):
     return output
 
 def fetch_external_records_batch(record_ids):
-    """Simulated N+1 HTTP request loop."""
-    data = []
-    for rid in record_ids:
-        # Uncached N+1 HTTP loop
-        res = requests.get(f"https://api.example.com/records/{rid}")
+    """Batched HTTP request using a single bulk endpoint instead of N+1 calls."""
+    if not record_ids:
+        return []
+    # Single bulk request instead of N+1 pattern
+    payload = {"ids": record_ids}
+    try:
+        res = requests.post("https://api.example.com/records/bulk", json=payload, timeout=5)
         if res.status_code == 200:
-            data.append(res.json())
-    return data
+            return res.json().get("records", [])
+    except requests.exceptions.RequestException:
+        pass
+    return []
+
+
+def summarize_results(results):
+    """Compute basic statistics over a flat list of numeric results."""
+    if not results:
+        return {"count": 0, "mean": 0.0, "std": 0.0, "min": 0.0, "max": 0.0}
+    arr = np.array(results, dtype=float)
+    return {
+        "count": len(arr),
+        "mean": float(np.mean(arr)),
+        "std": float(np.std(arr)),
+        "min": float(np.min(arr)),
+        "max": float(np.max(arr)),
+    }
 
 if __name__ == "__main__":
-    print("Running Carbotrace demo application on feature branch...")
+    print("Running Carbotrace demo application on test/workflow-trigger branch...")
+
     sample_matrix = [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]
     output = process_data_matrix(sample_matrix)
     print(f"Processed {len(output)} data points.")
+
+    # Exercise tensor analytics path
+    data_grid = [[[[i + j for j in range(2)] for i in range(2)] for _ in range(2)] for _ in range(2)]
+    tensor_output = compute_heavy_tensor_analytics(data_grid)
+    stats = summarize_results(tensor_output)
+    print(f"Tensor analytics: {stats}")
